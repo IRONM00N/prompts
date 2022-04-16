@@ -40,14 +40,11 @@
     "sisteransi": "^1.0.5"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.1",
-    "@babel/core": "^7.12.3",
-    "@babel/plugin-proposal-object-rest-spread": "^7.12.1",
-    "@babel/preset-env": "^7.12.1",
+    "@types/node": "^17.0.24",
     "tap-spec": "^2.2.2",
     "tape": "^4.13.3"
   },
   "engines": {
-    "node": ">= 6"
+    "node": ">= 17"
   }
 }
