@@ -2,13 +2,13 @@ export class DatePart {
 	token: string;
 	date: Date;
 	parts: any;
-	locales: any;
+	locales: Locales;
 
 	constructor({ token, date, parts, locales }: DatePartOptions = {}) {
 		this.token = token;
 		this.date = date || new Date();
 		this.parts = parts || [this];
-		this.locales = locales || {};
+		this.locales = locales || ({} as Locales);
 	}
 
 	up() {}
@@ -42,4 +42,11 @@ export interface DatePartOptions {
 	date?: Date;
 	parts?;
 	locales?: Locales;
+}
+
+export interface Locales {
+	months: string[];
+	monthsShort: string[];
+	weekdays: string[];
+	weekdaysShort: string[];
 }

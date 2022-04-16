@@ -1,5 +1,3 @@
-"use strict";
-
 import { bold, cyan, red } from "kleur";
 import { cursor, erase } from "sisteransi";
 import {
@@ -11,35 +9,65 @@ import {
 	Minutes,
 	Month,
 	Seconds,
-	Year,
+	Year
 } from "../dateparts";
+import { DatePartOptions, Locales } from "../dateparts/datepart";
 import { clear, figures, style } from "../util";
 import { Prompt } from "./prompt";
 
 const regex =
 	/\\(.)|"((?:\\["\\]|[^"])+)"|(D[Do]?|d{3,4}|d)|(M{1,4})|(YY(?:YY)?)|([aA])|([Hh]{1,2})|(m{1,2})|(s{1,2})|(S{1,4})|./g;
 const regexGroups = {
-	1: ({ token }) => token.replace(/\\(.)/g, "$1"),
-	2: (opts) => new Day(opts), // Day // TODO
-	3: (opts) => new Month(opts), // Month
-	4: (opts) => new Year(opts), // Year
-	5: (opts) => new Meridiem(opts), // AM/PM // TODO (special)
-	6: (opts) => new Hours(opts), // Hours
-	7: (opts) => new Minutes(opts), // Minutes
-	8: (opts) => new Seconds(opts), // Seconds
-	9: (opts) => new Milliseconds(opts), // Fractional seconds
+	1: ({ token }: DatePartOptions) => token.replace(/\\(.)/g, "$1"),
+	2: (opts: DatePartOptions) => new Day(opts), // Day // TODO
+	3: (opts: DatePartOptions) => new Month(opts), // Month
+	4: (opts: DatePartOptions) => new Year(opts), // Year
+	5: (opts: DatePartOptions) => new Meridiem(opts), // AM/PM // TODO (special)
+	6: (opts: DatePartOptions) => new Hours(opts), // Hours
+	7: (opts: DatePartOptions) => new Minutes(opts), // Minutes
+	8: (opts: DatePartOptions) => new Seconds(opts), // Seconds
+	9: (opts: DatePartOptions) => new Milliseconds(opts), // Fractional seconds
 };
 
-const dfltLocales = {
-	months:
-		"January,February,March,April,May,June,July,August,September,October,November,December".split(
-			","
-		),
-	monthsShort: "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec".split(","),
-	weekdays: "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday".split(
-		","
-	),
-	weekdaysShort: "Sun,Mon,Tue,Wed,Thu,Fri,Sat".split(","),
+const defaultLocales: Locales = {
+	months: [
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December",
+	],
+	monthsShort: [
+		"Jan",
+		"Feb",
+		"Mar",
+		"Apr",
+		"May",
+		"Jun",
+		"Jul",
+		"Aug",
+		"Sep",
+		"Oct",
+		"Nov",
+		"Dec",
+	],
+	weekdays: [
+		"Sunday",
+		"Monday",
+		"Tuesday",
+		"Wednesday",
+		"Thursday",
+		"Friday",
+		"Saturday",
+	],
+	weekdaysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
 };
 
 /**
@@ -60,7 +88,7 @@ export class DatePrompt extends Prompt {
 		this.msg = opts.message;
 		this.cursor = 0;
 		this.typed = "";
-		this.locales = Object.assign(dfltLocales, opts.locales);
+		this.locales = { ...defaultLocales, ...(opts.locales ?? {}) };
 		this._date = opts.initial || new Date();
 		this.errorMsg = opts.error || "Please Enter A Valid Value";
 		this.validator = opts.validate || (() => true);
@@ -81,12 +109,12 @@ export class DatePrompt extends Prompt {
 		if (date) this._date.setTime(date.getTime());
 	}
 
-	set mask(mask) {
-		let result;
+	set mask(mask: string: string) {
+		let result: any[];
 		this.parts = [];
 		while ((result = regex.exec(mask))) {
 			let match = result.shift();
-			let idx = result.findIndex((gr) => gr != null);
+			let idx = result.findIndex((gr: any) => gr != null);
 			this.parts.push(
 				idx in regexGroups
 					? regexGroups[idx]({
@@ -99,7 +127,7 @@ export class DatePrompt extends Prompt {
 			);
 		}
 
-		let parts = this.parts.reduce((arr, i) => {
+		let parts = this.parts.reduce((arr: any[], i: any) => {
 			if (typeof i === "string" && typeof arr[arr.length - 1] === "string")
 				arr[arr.length - 1] += i;
 			else arr.push(i);
@@ -111,14 +139,14 @@ export class DatePrompt extends Prompt {
 		this.reset();
 	}
 
-	moveCursor(n) {
+	moveCursor(n: any) {
 		this.typed = "";
 		this.cursor = n;
 		this.fire();
 	}
 
 	reset() {
-		this.moveCursor(this.parts.findIndex((p) => p instanceof DatePart));
+		this.moveCursor(this.parts.findIndex((p: any) => p instanceof DatePart));
 		this.fire();
 		this.render();
 	}
@@ -192,12 +220,12 @@ export class DatePrompt extends Prompt {
 		this.moveCursor(
 			next
 				? this.parts.indexOf(next)
-				: this.parts.findIndex((part) => part instanceof DatePart)
+				: this.parts.findIndex((part: any) => part instanceof DatePart)
 		);
 		this.render();
 	}
 
-	_(c) {
+	_(c: string) {
 		if (/\d/.test(c)) {
 			this.typed += c;
 			this.parts[this.cursor].setTo(this.typed);
@@ -218,7 +246,7 @@ export class DatePrompt extends Prompt {
 			style.delimiter(false),
 			this.parts
 				.reduce(
-					(arr, p, idx) =>
+					(arr: string | any[], p: { toString: () => string | number; }, idx: any) =>
 						arr.concat(
 							idx === this.cursor && !this.done
 								? cyan().underline(p.toString())
@@ -234,7 +262,7 @@ export class DatePrompt extends Prompt {
 			this.outputText += this.errorMsg
 				.split("\n")
 				.reduce(
-					(a, l, i) =>
+					(a: string, l: string | number, i: any) =>
 						a + `\n${i ? ` ` : figures.pointerSmall} ${red().italic(l)}`,
 					``
 				);

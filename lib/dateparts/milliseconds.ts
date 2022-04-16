@@ -16,6 +16,6 @@ export class Milliseconds extends DatePart {
 	toString() {
 		return String(this.date.getMilliseconds())
 			.padStart(4, "0")
-			.substr(0, this.token.length);
+			.slice(0, this.token.length);
 	}
 }

@@ -36,15 +36,16 @@
     "interact"
   ],
   "dependencies": {
-    "kleur": "^4.0.1",
+    "kleur": "^4.1.4",
     "sisteransi": "^1.0.5"
   },
   "devDependencies": {
     "@types/node": "^17.0.24",
-    "tap-spec": "^2.2.2",
-    "tape": "^4.13.3"
+    "tap-spec": "^5.0.0",
+    "tape": "^5.5.3"
   },
   "engines": {
     "node": ">= 17"
-  }
+  },
+  "packageManager": "yarn@3.2.0"
 }

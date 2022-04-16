@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD024 MD033 MD036 MD041 -->
+
 <p align="center">
   <img src="https://github.com/terkelg/prompts/raw/master/prompts.png" alt="Prompts" width="500" />
 </p>
@@ -39,8 +41,8 @@
 
 ## ❯ Install
 
-```
-$ npm install --save prompts
+```sh
+npm install --save prompts
 ```
 
 > This package supports Node 17 and above

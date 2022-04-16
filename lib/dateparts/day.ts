@@ -24,13 +24,13 @@ export class Day extends DatePart {
 		return this.token === "DD"
 			? String(date).padStart(2, "0")
 			: this.token === "Do"
-			? date + pos(date)
+			? String(date + pos(date))
 			: this.token === "d"
-			? day + 1
+			? String(day + 1)
 			: this.token === "ddd"
-			? this.locales.weekdaysShort[day]
+			? String(this.locales.weekdaysShort[day])
 			: this.token === "dddd"
 			? this.locales.weekdays[day]
-			: date;
+			: String(date);
 	}
 }

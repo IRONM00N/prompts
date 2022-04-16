@@ -16,6 +16,8 @@ export class Hours extends DatePart {
 	toString() {
 		let hours = this.date.getHours();
 		if (/h/.test(this.token)) hours = hours % 12 || 12;
-		return this.token.length > 1 ? String(hours).padStart(2, "0") : hours;
+		return this.token.length > 1
+			? String(hours).padStart(2, "0")
+			: String(hours);
 	}
 }

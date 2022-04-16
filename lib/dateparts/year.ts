@@ -15,6 +15,6 @@ export class Year extends DatePart {
 
 	toString() {
 		let year = String(this.date.getFullYear()).padStart(4, "0");
-		return this.token.length === 2 ? year.substr(-2) : year;
+		return this.token.length === 2 ? year.slice(-2) : year;
 	}
 }
